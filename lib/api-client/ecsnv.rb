@@ -1,5 +1,5 @@
 require 'aws-sdk-ecs'
-require 'pry'
+require 'colorize'
 
 class Ecsnv
   attr_reader :profile, :cluster, :service_name, :ecs, :region, :ecs_services
@@ -26,12 +26,13 @@ class Ecsnv
         env_vars.map { |env| "#{env.name}=#{env.value}" }.join("\n")
       )
     end
+    puts "#{env_vars.count} env variables written to #{filename}".green
   end
 
   private
   def get_region_by_profile
     result = Aws.shared_config
-    # Hack to access a private method :p
+    # Hack to access a private method
     config = result.instance_eval('@parsed_config')
 
     config.dig(profile, 'region')
